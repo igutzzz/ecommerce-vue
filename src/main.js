@@ -1,4 +1,14 @@
-import { createApp } from 'vue'
-import App from './App.vue'
+import { createApp } from 'vue';
+import App from './App.vue';
+import { library } from '@fortawesome/fontawesome-svg-core';
 
-createApp(App).mount('#app')
+import { faStar, faCartShopping } from '@fortawesome/free-solid-svg-icons';
+
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+
+library.add(faStar, faCartShopping);
+
+
+createApp(App)
+.component("font-awesome-icon", FontAwesomeIcon)
+.mount('#app')
