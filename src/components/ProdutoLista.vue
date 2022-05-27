@@ -9,8 +9,13 @@
                 <p id="preço">R$ {{ produto.price }}</p>
             </div>
             <div id="comprar">
-                <input type="number" name="Quantidade" id="qnt">
-                <button>Comprar</button>
+                <div class="itemsNumber">
+                    <button id="mais">-</button>
+                    <input type="number" name="Quantidade"  v-model=produto.quantidade id="qnt">
+                    <button id="menos">+</button>
+                </div>
+                <p>{{  }}</p>
+                <button @click="addToCart(produto, produto.quantidade)" id="comprar_btn">Comprar</button>
             </div>
         </div>
     </main>
@@ -18,19 +23,65 @@
 
 <script>
 
+    import { mapState } from 'pinia';
+    import { useProdutoStore } from '@/stores/ProdutoStore';
+
 export default {
+
     name: 'ProdutoCard',
     data() {
         return {
             produtos: [],
+            carrinho: [],
         }
+    },
+
+
+    computed: {
+        ...mapState(useProdutoStore, ['carrinho', 'produtos', 'name']),
     },
 
     mounted() {
         fetch('https://fakestoreapi.com/products/')
         .then(res=>res.json())
-        .then (data=> this.produtos = data)
-        .catch(err => console.log(err.message))
+        .then (data=> {
+            this.produtos = data
+            this.produtos.forEach(produto => {
+                produto.quantidade = 1
+            })
+            })
+        .catch(err => console.log(err.message));
+    },
+
+    methods: {
+        addToCart(produto, qntd){
+            let nome = produto.title;
+            let preco =  produto.price;
+            let quantidade = qntd;
+            let id = produto.id;
+
+            if(this.carrinho.find(item => item.id === id)){
+                this.carrinho.find(item => item.id === id).quantidade += quantidade;
+            }else{
+                this.carrinho.push({
+                    id: id,
+                    nome: nome,
+                    preco: preco,
+                    quantidade: quantidade,
+                })
+            }
+
+            this.quantidade = 1;
+            console.log(this.carrinho);
+
+            let quantidadeTotal = 0;
+            this.carrinho.forEach(produto => {
+                let quantidade = produto.quantidade
+                quantidadeTotal += quantidade;
+            })
+            console.log(quantidadeTotal);
+        },
+        
     }
 }
 </script>
@@ -103,7 +154,7 @@ input[type=number]::-webkit-inner-spin-button {
 
   }
 
-#comprar button {
+#comprar_btn {
     border: none;
     background-color: var(--main-color);
     padding: 1rem;
@@ -112,6 +163,12 @@ input[type=number]::-webkit-inner-spin-button {
     font-size: 1.3rem;
     font-weight: 700;
     color: #fff;
+    transition: all 0.12s ease-in-out; 
+}
+
+#comprar_btn:hover {
+    background-color: hsl(183, 60%, 52%);
+    cursor: pointer;
 }
 
 #comprar {
@@ -120,4 +177,16 @@ input[type=number]::-webkit-inner-spin-button {
     gap: 1rem;
     align-items: center;
 }
+
+.itemsNumber {
+    display: flex;
+}
+
+.itemsNumber button {
+    background-color: var(--bg-color);
+    border: none;
+    border-radius: 10px;
+    padding: 1rem;
+}
+
 </style>
