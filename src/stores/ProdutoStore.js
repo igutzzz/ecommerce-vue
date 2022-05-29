@@ -34,7 +34,7 @@ export const useProdutoStore = defineStore('ProdutoStore', {
                 totalPreco += preco
             })
 
-            return totalPreco
+            return totalPreco.toLocaleString('pt-BR')
         }
     },
 

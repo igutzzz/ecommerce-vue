@@ -9,7 +9,7 @@
                     <h2>R${{produto.preco}}</h2>
                 </div>
                 <div>
-                    <p>x{{produto.quantidade}}</p>
+                    <input type="number" v-model=produto.quantidade>
                 </div>
             </li>
         </ul>
