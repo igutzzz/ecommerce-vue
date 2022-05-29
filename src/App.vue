@@ -1,5 +1,6 @@
 <template>
   <NavBar />
+  <CarrinhoCard />
   <ProdutoCard />
 </template>
 
@@ -7,12 +8,15 @@
 
 import ProdutoCard from './components/ProdutoLista.vue'
 import NavBar from './components/Navbar.vue'
+import CarrinhoCard from './components/Carrinho.vue'
 
 export default {
   name: 'App',
   components: {
     ProdutoCard,
     NavBar,
+    CarrinhoCard,
+
 },
 
   data() {
@@ -35,4 +39,5 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   color: var(--text-color);
 }
+
 </style>

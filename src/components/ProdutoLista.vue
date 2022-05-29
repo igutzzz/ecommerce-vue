@@ -10,9 +10,9 @@
             </div>
             <div id="comprar">
                 <div class="itemsNumber">
-                    <button id="mais">-</button>
+                    <button id="menos">-</button>
                     <input type="number" name="Quantidade"  v-model=produto.quantidade id="qnt">
-                    <button id="menos">+</button>
+                    <button id="mais">+</button>
                 </div>
                 <p>{{  }}</p>
                 <button @click="addToCart(produto, produto.quantidade)" id="comprar_btn">Comprar</button>
@@ -23,7 +23,8 @@
 
 <script>
 
-    import { mapState } from 'pinia';
+    import { mapWritableState } from 'pinia';
+    import { mapActions } from 'pinia';
     import { useProdutoStore } from '@/stores/ProdutoStore';
 
 export default {
@@ -31,14 +32,15 @@ export default {
     name: 'ProdutoCard',
     data() {
         return {
-            produtos: [],
-            carrinho: [],
+            //produtos: [],
+            //carrinho: [],
         }
     },
 
 
     computed: {
-        ...mapState(useProdutoStore, ['carrinho', 'produtos', 'name']),
+        ...mapWritableState(useProdutoStore, ['carrinho', 'produtos',]),
+        ...mapActions(useProdutoStore, ['addItems'])
     },
 
     mounted() {
@@ -53,34 +55,16 @@ export default {
         .catch(err => console.log(err.message));
     },
 
+    setup() {
+        const produtoStore = useProdutoStore();
+
+        return { produtoStore }
+    },
+
     methods: {
-        addToCart(produto, qntd){
-            let nome = produto.title;
-            let preco =  produto.price;
-            let quantidade = qntd;
-            let id = produto.id;
-
-            if(this.carrinho.find(item => item.id === id)){
-                this.carrinho.find(item => item.id === id).quantidade += quantidade;
-            }else{
-                this.carrinho.push({
-                    id: id,
-                    nome: nome,
-                    preco: preco,
-                    quantidade: quantidade,
-                })
-            }
-
-            this.quantidade = 1;
-            console.log(this.carrinho);
-
-            let quantidadeTotal = 0;
-            this.carrinho.forEach(produto => {
-                let quantidade = produto.quantidade
-                quantidadeTotal += quantidade;
-            })
-            console.log(quantidadeTotal);
-        },
+        addToCart(produto, qntd) {
+            this.produtoStore.addItems(produto, qntd)
+        }
         
     }
 }
@@ -146,7 +130,7 @@ input[type=number] {
     font-size:  1.3rem;
     background-color: var(--bg-color);
     border: none;
-    border-radius: 10px;
+    
 }
 
 input[type=number]::-webkit-inner-spin-button {
@@ -184,9 +168,16 @@ input[type=number]::-webkit-inner-spin-button {
 
 .itemsNumber button {
     background-color: var(--bg-color);
-    border: none;
-    border-radius: 10px;
     padding: 1rem;
+    border: 3px solid var(--main-color);
+}
+
+#menos {
+    border-radius: 10px 0 0 10px;
+}
+
+#mais {
+    border-radius: 0 10px 10px 0;
 }
 
 </style>
