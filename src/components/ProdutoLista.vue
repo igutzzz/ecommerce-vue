@@ -1,4 +1,12 @@
 <template>
+    <div id="classificar">
+        <p>Classificar por:</p>
+        <div id="sort">
+            <p>Avaliação:</p>
+            <font-awesome-icon icon="arrow-down-9-1" class="sort-btn"/>
+            <font-awesome-icon icon="arrow-down-1-9"  class="sort-btn"/>
+        </div>
+    </div>
     <main class="lista">
         <div v-for="produto in produtos" :key=produto.id class="produto">
             <div id="info">
@@ -71,6 +79,25 @@ export default {
 </script>
 
 <style scoped>
+
+#classificar {
+    display:flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 1rem 2rem;
+    font-size: 1.2em;
+}
+
+#sort {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 1rem
+}
+
+.sort-btn:hover {
+    cursor: pointer;
+}   
 
 .lista {
     display: grid;
