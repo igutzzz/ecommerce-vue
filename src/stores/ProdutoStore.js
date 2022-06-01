@@ -9,8 +9,10 @@ export const useProdutoStore = defineStore('ProdutoStore', {
             imagem: '',
             nome: '',
             preco: 0,
-            quantidade: 0,
+            quantidade: 1,
+            classificacao: 0,
             id: 0,
+            visivel: false,
         }
     },
 
@@ -35,7 +37,8 @@ export const useProdutoStore = defineStore('ProdutoStore', {
             })
 
             return totalPreco.toLocaleString('pt-BR')
-        }
+        },
+
     },
 
     actions: {
@@ -45,6 +48,7 @@ export const useProdutoStore = defineStore('ProdutoStore', {
             let quantidade = qntd;
             let id = produto.id;
             let imagem = produto.image
+            let classificacao = produto.rating.rate
 
             if(this.carrinho.find(item => item.id === id)){
                 this.carrinho.find(item => item.id === id).quantidade += quantidade;
@@ -55,14 +59,24 @@ export const useProdutoStore = defineStore('ProdutoStore', {
                     nome: nome,
                     preco: preco,
                     quantidade: quantidade,
+                    classificacao: classificacao
                 })
             }
 
             this.quantidade = 1;
-            console.log(this.carrinho);
+        },
+        removeItem(id){
+            id = this.id;
+            this.carrinho.splice(id, 1);
+        },
 
 
-            
+        ordemCrescente() {
+            this.produtos.sort((a, b) => a.rating.rate - b.rating.rate)
+        },
+
+        ordemDecrescente() {
+            this.produtos.sort((a, b) => b.rating.rate - a.rating.rate)
         }
     }
 })

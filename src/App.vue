@@ -1,6 +1,6 @@
 <template>
   <NavBar />
-  <!-- <CarrinhoCard /> -->
+  <CarrinhoCard v-show="visivel" />
   <ProdutoCard />
 </template>
 
@@ -8,16 +8,22 @@
 
 import ProdutoCard from './components/ProdutoLista.vue'
 import NavBar from './components/Navbar.vue'
-//import CarrinhoCard from './components/Carrinho.vue'
+import CarrinhoCard from './components/Carrinho.vue'
+import { useProdutoStore } from './stores/ProdutoStore'
+import { mapState } from 'pinia'
 
 export default {
   name: 'App',
   components: {
     ProdutoCard,
     NavBar,
-    //CarrinhoCard,
+    CarrinhoCard,
 
 },
+
+  computed: {
+    ...mapState(useProdutoStore, ['visivel',]),
+  },
 
   data() {
     return{
@@ -38,6 +44,7 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: var(--text-color);
+
 }
 
 </style>

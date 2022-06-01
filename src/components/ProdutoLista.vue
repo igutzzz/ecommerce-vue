@@ -1,32 +1,33 @@
 <template>
-    <div id="classificar">
-        <p>Classificar por:</p>
-        <div id="sort">
-            <p>Avaliação:</p>
-            <font-awesome-icon icon="arrow-down-9-1" class="sort-btn"/>
-            <font-awesome-icon icon="arrow-down-1-9"  class="sort-btn"/>
-        </div>
-    </div>
-    <main class="lista">
-        <div v-for="produto in produtos" :key=produto.id class="produto">
-            <div id="info">
-                <img :src=produto.image :alt=produto.title>
-                <p id="titulo">{{ produto.title }}</p>
-                <p id="categoria">{{ produto.category }}</p>
-                <p><font-awesome-icon icon="star" />{{ produto.rating.rate }} ({{ produto.rating.count }})</p>
-                <p id="preço">R$ {{ produto.price }}</p>
+    <div class="container">
+        <div id="classificar">
+            <p>Classificar por:</p>
+            <div id="sort">
+                <p>Avaliação:</p>
+                <font-awesome-icon icon="arrow-down-1-9" class="sort-btn" @click="ordenarDecrescente()"/>
+                <font-awesome-icon icon="arrow-down-9-1"  class="sort-btn" @click="ordenarCrescente()"/>
             </div>
-            <div id="comprar">
-                <div class="itemsNumber">
-                    <button id="menos">-</button>
-                    <input type="number" name="Quantidade"  v-model=produto.quantidade id="qnt">
-                    <button id="mais">+</button>
+        </div>
+        <main class="lista">
+            <div v-for="produto in produtos" :key=produto.id class="produto">
+                <div id="info">
+                    <img :src=produto.image :alt=produto.title>
+                    <p id="titulo">{{ produto.title }}</p>
+                    <p id="categoria">{{ produto.category }}</p>
+                    <p><font-awesome-icon icon="star" />{{ produto.rating.rate }} ({{ produto.rating.count }})</p>
+                    <p id="preço">R$ {{ produto.price }}</p>
                 </div>
-                <p>{{  }}</p>
-                <button @click="addToCart(produto, produto.quantidade)" id="comprar_btn">Comprar</button>
+                <div id="comprar">
+                    <div class="itemsNumber">
+                        <button id="menos" @click="quantidadeMenos(produto)">-</button>
+                        <input type="number" name="Quantidade"  v-model=produto.quantidade id="qnt">
+                        <button id="mais" @click="quantidadeMais(produto)">+</button>
+                    </div>
+                    <button @click="addToCart(produto, produto.quantidade)" id="comprar_btn">Comprar</button>
+                </div>
             </div>
-        </div>
-    </main>
+        </main>
+    </div>
 </template>
 
 <script>
@@ -48,7 +49,7 @@ export default {
 
     computed: {
         ...mapWritableState(useProdutoStore, ['carrinho', 'produtos',]),
-        ...mapActions(useProdutoStore, ['addItems'])
+        ...mapActions(useProdutoStore, ['addItems', 'ordemCrescente', 'ordemDecrescente'])
     },
 
     mounted() {
@@ -72,8 +73,25 @@ export default {
     methods: {
         addToCart(produto, qntd) {
             this.produtoStore.addItems(produto, qntd)
-        }
+        },
+
+        quantidadeMais(produto){
+            produto.quantidade++
+        },
         
+        quantidadeMenos(produto){
+            if(produto.quantidade > 1){
+                produto.quantidade--
+            }
+        },
+
+        ordenarCrescente () {
+            this.produtoStore.ordemCrescente()
+        },
+        
+        ordenarDecrescente () {
+            this.produtoStore.ordemDecrescente()
+        }
     }
 }
 </script>
@@ -101,14 +119,15 @@ export default {
 
 .lista {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-row-gap: 10px;
-    margin: 0 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-gap: 1rem 2.5rem;
+    margin: 0 1rem;
 }
 
 
 .produto {
-    width: 20rem;
+    margin: 1rem 0;
+    width: 21rem;
     border-radius: 5px;
     background-color: #fff;
     padding: 1rem;
@@ -185,7 +204,7 @@ input[type=number]::-webkit-inner-spin-button {
 #comprar {
     display: flex;
     justify-content: center;
-    gap: 1rem;
+    gap: .5rem;
     align-items: center;
 }
 
@@ -196,7 +215,11 @@ input[type=number]::-webkit-inner-spin-button {
 .itemsNumber button {
     background-color: var(--bg-color);
     padding: 1rem;
-    border: 3px solid var(--main-color);
+    border: 2px solid var(--main-color);
+}
+
+.itemsNumber button:hover {
+    cursor: pointer;
 }
 
 #menos {
@@ -205,6 +228,23 @@ input[type=number]::-webkit-inner-spin-button {
 
 #mais {
     border-radius: 0 10px 10px 0;
+}
+
+
+@media (max-width: 900px) {
+  .lista { 
+    grid-template-columns: repeat(2, 1fr); 
+    grid-gap: .5rem;
+  }
+}
+
+@media (max-width: 728px) {
+  .lista { 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    }
 }
 
 </style>

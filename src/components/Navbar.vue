@@ -1,6 +1,6 @@
 <template>
     <div class="navbar">
-        <h1>Loja</h1>
+        <h1>Petit.</h1>
         <ul id="nav_menu">
             <li>Categorias</li>
             <li>Login</li>
@@ -24,21 +24,20 @@
 
         data(){
             return {
-                showCarrinho: false,
             }
         },
 
         computed: {
-            ...mapWritableState(useProdutoStore, ['total'])
+            ...mapWritableState(useProdutoStore, ['total', 'visivel'])
         },
 
         methods: {
             carrinhoShow() {
-                if (this.showCarrinho){
-                    console.log('carrinho a vista')
-                } else {
-                    console.log('carrinho fechado')
+                if(!this.visivel) {
+                    this.visivel = true
                 }
+
+                console.log(this.visivel)
             }
         }
     }
