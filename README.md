@@ -1,24 +1,25 @@
-# e-commerce
 
-## Project setup
-```
-npm install
-```
+# Desafio Ide@l - E-commerce
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+Site de E-commerce desenvolvido baseado em uma API.
 
-### Compiles and minifies for production
-```
-npm run build
-```
+Feito com Vue.js, na arquitetura SPA.
 
-### Lints and fixes files
-```
-npm run lint
-```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+
+
+## Autor
+
+- [@igutzzz](https://www.github.com/igutzzz)
+
+
+## Funcionalidades
+
+- Definir a quantidade de itens que serão adicionados no carrinho
+- Ver o item no carrinho, podendo alterar a quantidade pelo próprio carrinho
+- Ordenar os produtos pela classificação (crescente e decrescente)
+- Exibir o valor total da compra, atualizado em tempo real ao manipular o carrinho
+## Screenshots
+
+![Site Screenshot](./screenshot.png)
+
